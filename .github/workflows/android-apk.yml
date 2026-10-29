@@ -24,6 +24,18 @@ jobs:
           channel: stable
       - name: Create Android platform scaffolding
         run: flutter create --platforms=android --project-name carbuy_khodro .
+      - name: Restore project widget test after Flutter scaffolding
+        run: |
+          cat > test/widget_test.dart <<'EOF'
+          import 'package:flutter_test/flutter_test.dart';
+          import 'package:carbuy_khodro/main.dart';
+          void main() {
+            testWidgets('CarBuyKhodro home screen renders', (WidgetTester tester) async {
+              await tester.pumpWidget(const CarBuyApp());
+              expect(find.text('کاربای خودرو'), findsOneWidget);
+            });
+          }
+          EOF
       - name: Get dependencies
         run: flutter pub get
       - name: Analyze
